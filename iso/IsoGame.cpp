@@ -8,6 +8,7 @@
 
 #include "IsoGame.hpp"
 
+// Constructor.
 IsoGame::IsoGame() {
     // Initialize the game board with '-' to denote empty spaces for moving.
     for (int i = 0; i < HEIGHT; i++) {
@@ -17,6 +18,7 @@ IsoGame::IsoGame() {
     }
 }
 
+// Find the index of a player's piece.
 std::pair<int, int> IsoGame::findIndex(char player) {
     // Find the index of the players piece on the board.
     for (int i = 0; i < HEIGHT; i++) {
@@ -27,4 +29,15 @@ std::pair<int, int> IsoGame::findIndex(char player) {
         }
     }
     return std::pair<int, int>(-1, -1);
+}
+
+// Make a move.
+void IsoGame::makeMove(std::pair<int, int> idx, std::pair<int, int> newMove, char player) {
+    int idxHeight = idx.first;
+    int idxWidth = idx.second;
+    int moveHeight = newMove.first;
+    int moveWidth = newMove.second;
+    
+    board[idxHeight][idxWidth] = '*';
+    board[moveHeight][moveWidth] = player;
 }

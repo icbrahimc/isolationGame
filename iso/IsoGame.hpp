@@ -6,6 +6,14 @@
 //  Copyright © 2017 icbrahimc. All rights reserved.
 //
 
+/* LEGEND
+    - represents empty space.
+    * represents space that has already been established.
+    X is the min.
+    O is the max.
+ 
+*/
+
 #ifndef IsoGame_hpp
 #define IsoGame_hpp
 
@@ -24,6 +32,9 @@ public:
     
     // Find the index of a current state.
     std::pair<int, int> findIndex(char);
+    
+    // Make a move and replace the old spot with an asterisk.
+    void makeMove(std::pair<int, int>, std::pair<int, int>, char);
 };
 
 #endif /* IsoGame_hpp */
