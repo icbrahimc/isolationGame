@@ -35,6 +35,9 @@ public:
     
     // Make a move and replace the old spot with an asterisk.
     void makeMove(std::pair<int, int>, std::pair<int, int>, char);
+    
+    // Print the isolation game board.
+    void printBoard() const;
 };
 
 #endif /* IsoGame_hpp */

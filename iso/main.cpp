@@ -7,12 +7,10 @@
 //
 
 #include <iostream>
+#include "IsoGame.hpp"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    int michael[9][9];
-    michael[0][0] = 1;
-    std::cout << michael[0][0];
-    std::cout << "Hello, World!\n";
+    IsoGame game = IsoGame();
+    game.printBoard();
     return 0;
 }

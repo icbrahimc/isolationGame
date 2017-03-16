@@ -41,3 +41,20 @@ void IsoGame::makeMove(std::pair<int, int> idx, std::pair<int, int> newMove, cha
     board[idxHeight][idxWidth] = '*';
     board[moveHeight][moveWidth] = player;
 }
+
+// Print the game board.
+void IsoGame::printBoard() const {
+    std::cout << "  ";
+    for (int count = 0; count < HEIGHT; count++) {
+        std::cout << count << " ";
+    }
+    std::cout << std::endl;
+    
+    for (int i = 0; i < HEIGHT; i++) {
+        std::cout << i << " ";
+        for (int j = 0; j < WIDTH; j++) {
+            std::cout << board[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
