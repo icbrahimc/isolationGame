@@ -45,7 +45,9 @@ void IsoGame::makeMove(std::pair<int, int> idx, std::pair<int, int> newMove, cha
 // Figure out the amount of moves to be made.
 std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot) {
     std::vector<std::pair<int, int>> moves;
+    std::vector<std::pair<int, int>> validMoves;
     std::pair<int, int> holder;
+    bool valid;
     
     // Y is going up -.
     for (int count = 1; count < HEIGHT; count++) {
@@ -60,18 +62,59 @@ std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot
     }
     
     // X is going left -.
-    for (int count = 0; count < WIDTH; count++) {
+    for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first - count, spot.second);
         moves.push_back(holder);
     }
     
     // Y is going right +.
-    for (int count = 0; count < WIDTH; count++) {
+    for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first + count, spot.second);
         moves.push_back(holder);
     }
     
-    return moves;
+    // TODO(icbrahimc): Change the diagonal for loops to account. This assumes that the dimensions are equal.
+    // X, Y top right.
+    for (int count = 1; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first + count, spot.second - count);
+        moves.push_back(holder);
+    }
+    
+    // X, Y top left.
+    for (int count = 1; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first - count, spot.second - count);
+        moves.push_back(holder);
+    }
+    
+    // X, Y bottom right.
+    for (int count = 1; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first + count, spot.second + count);
+        moves.push_back(holder);
+    }
+    
+    // X, Y bottom left.
+    for (int count = 1; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first - count, spot.second + count);
+        moves.push_back(holder);
+    }
+    
+    for (int count = 0; count < moves.size(); count++) {
+        holder = moves[count];
+        valid = true;
+        if (holder.first < 0 || WIDTH <= holder.first) {
+            valid = false;
+        }
+        
+        if (holder.second < 0 || HEIGHT <= holder.second) {
+            valid = false;
+        }
+        
+        if (valid) {
+            validMoves.push_back(holder);
+        }
+    }
+    
+    return validMoves;
 }
 
 // Print the game board.

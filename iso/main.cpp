@@ -12,5 +12,6 @@
 int main(int argc, const char * argv[]) {
     IsoGame game = IsoGame();
     game.printBoard();
+    game.movesFromSpot(std::pair<int, int>(1,1));
     return 0;
 }
