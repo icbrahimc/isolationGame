@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 
 class IsoGame {
 private:
@@ -32,6 +33,9 @@ public:
     
     // Find the index of a current state.
     std::pair<int, int> findIndex(char);
+    
+    // Find the places where the player can move.
+    std::vector<std::pair<int, int>> movesFromSpot(std::pair<int, int>);
     
     // Make a move and replace the old spot with an asterisk.
     void makeMove(std::pair<int, int>, std::pair<int, int>, char);

@@ -42,6 +42,38 @@ void IsoGame::makeMove(std::pair<int, int> idx, std::pair<int, int> newMove, cha
     board[moveHeight][moveWidth] = player;
 }
 
+// Figure out the amount of moves to be made.
+std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot) {
+    std::vector<std::pair<int, int>> moves;
+    std::pair<int, int> holder;
+    
+    // Y is going up -.
+    for (int count = 1; count < HEIGHT; count++) {
+        holder = std::pair<int, int>(spot.first, spot.second - count);
+        moves.push_back(holder);
+    }
+    
+    // Y is going down +.
+    for (int count = 1; count < HEIGHT; count++) {
+        holder = std::pair<int, int>(spot.first, spot.second + count);
+        moves.push_back(holder);
+    }
+    
+    // X is going left -.
+    for (int count = 0; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first - count, spot.second);
+        moves.push_back(holder);
+    }
+    
+    // Y is going right +.
+    for (int count = 0; count < WIDTH; count++) {
+        holder = std::pair<int, int>(spot.first + count, spot.second);
+        moves.push_back(holder);
+    }
+    
+    return moves;
+}
+
 // Print the game board.
 void IsoGame::printBoard() const {
     std::cout << "  ";
