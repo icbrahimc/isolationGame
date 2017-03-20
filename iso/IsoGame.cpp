@@ -28,6 +28,7 @@ std::pair<int, int> IsoGame::findIndex(char player) {
             }
         }
     }
+    
     return std::pair<int, int>(-1, -1);
 }
 
