@@ -32,7 +32,7 @@ public:
     IsoGame();
     
     // Find the index of a current state.
-    std::pair<int, int> findIndex(char);
+    std::pair<int, int> findIndex(char) const;
     
     // Returns whether or not the space is invalid.
     bool invalidSpace(std::pair<int, int> spot) const {
@@ -47,6 +47,9 @@ public:
     
     // Returns the character of the space on the board.
     char returnSpace(std::pair<int, int> spot) const { return board[spot.first][spot.second]; };
+    
+    // Terminal function.
+    bool terminalFunc();
     
     // Print the isolation game board.
     void printBoard() const;

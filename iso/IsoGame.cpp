@@ -19,7 +19,7 @@ IsoGame::IsoGame() {
 }
 
 // Find the index of a player's piece.
-std::pair<int, int> IsoGame::findIndex(char player) {
+std::pair<int, int> IsoGame::findIndex(char player) const{
     // Find the index of the players piece on the board.
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -161,4 +161,18 @@ void IsoGame::printBoard() const {
         }
         std::cout << std::endl;
     }
+}
+
+// Returns whether or not the game is terminating.
+bool IsoGame::terminalFunc() {
+    std::pair<int, int> xLoc = findIndex('X');
+    std::pair<int, int> yLoc = findIndex('O');
+    std::vector<std::pair<int, int>> xMoves = movesFromSpot(xLoc);
+    std::vector<std::pair<int, int>> yMoves = movesFromSpot(yLoc);
+    
+    if (xMoves.size() == 0 || yMoves.size() == 0) {
+        return true;
+    }
+    
+    return false;
 }
