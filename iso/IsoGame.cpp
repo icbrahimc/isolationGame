@@ -163,16 +163,18 @@ void IsoGame::printBoard() const {
     }
 }
 
-// Returns whether or not the game is terminating.
-bool IsoGame::terminalFunc() {
+// Returns whether or not the game is terminating and the winning piece.
+std::pair<bool, char> IsoGame::terminalFunc() {
     std::pair<int, int> xLoc = findIndex('X');
     std::pair<int, int> yLoc = findIndex('O');
     std::vector<std::pair<int, int>> xMoves = movesFromSpot(xLoc);
     std::vector<std::pair<int, int>> yMoves = movesFromSpot(yLoc);
     
-    if (xMoves.size() == 0 || yMoves.size() == 0) {
-        return true;
+    if (xMoves.size() == 0) {
+        return std::pair<bool, char>(true, 'O');
+    } else if (yMoves.size() == 0) {
+        return std::pair<bool, char>(true, 'X');
     }
     
-    return false;
+    return std::pair<bool, char>(false, '*');
 }

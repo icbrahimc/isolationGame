@@ -18,8 +18,9 @@ char compPiece(char);
 char selectPiece();
 
 int main(int argc, const char * argv[]) {
-//    IsoGame game = IsoGame();
-//    game.printBoard();
+    IsoGame game = IsoGame();
+    game.newGameInit();
+    game.printBoard();
 //    game.movesFromSpot(std::pair<int, int>(1,1));
 //    game.makeMove(std::pair<int, int>(1,1), std::pair<int, int>(0,0), 'X');
 //    game.printBoard();

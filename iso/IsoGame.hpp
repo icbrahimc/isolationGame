@@ -31,6 +31,12 @@ public:
     // Constructor
     IsoGame();
     
+    // New game intialize.
+    void newGameInit() {
+        board[0][0] = 'X';
+        board[WIDTH - 1][HEIGHT - 1] = 'O';
+    };
+    
     // Find the index of a current state.
     std::pair<int, int> findIndex(char) const;
     
@@ -49,7 +55,7 @@ public:
     char returnSpace(std::pair<int, int> spot) const { return board[spot.first][spot.second]; };
     
     // Terminal function.
-    bool terminalFunc();
+    std::pair<bool, char> terminalFunc();
     
     // Print the isolation game board.
     void printBoard() const;
