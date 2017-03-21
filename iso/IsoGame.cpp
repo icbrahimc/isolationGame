@@ -53,24 +53,36 @@ std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot
     // Y is going up -.
     for (int count = 1; count < HEIGHT; count++) {
         holder = std::pair<int, int>(spot.first, spot.second - count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // Y is going down +.
     for (int count = 1; count < HEIGHT; count++) {
         holder = std::pair<int, int>(spot.first, spot.second + count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // X is going left -.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first - count, spot.second);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // Y is going right +.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first + count, spot.second);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
@@ -78,24 +90,36 @@ std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot
     // X, Y top right.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first + count, spot.second - count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // X, Y top left.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first - count, spot.second - count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // X, Y bottom right.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first + count, spot.second + count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
     // X, Y bottom left.
     for (int count = 1; count < WIDTH; count++) {
         holder = std::pair<int, int>(spot.first - count, spot.second + count);
+        if (this->invalidSpace(holder)) {
+            break;
+        }
         moves.push_back(holder);
     }
     
@@ -114,6 +138,10 @@ std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot
             validMoves.push_back(holder);
         }
     }
+    
+//    for (int count = 0; count < validMoves.size(); count++) {
+//        std::cout << validMoves[count].first << ", " << validMoves[count].second << std::endl;
+//    }
     
     return validMoves;
 }
