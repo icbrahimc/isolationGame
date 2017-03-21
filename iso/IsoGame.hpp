@@ -34,6 +34,11 @@ public:
     // Find the index of a current state.
     std::pair<int, int> findIndex(char);
     
+    // Returns whether or not the space is invalid.
+    bool invalidSpace(std::pair<int, int> spot) const {
+        return (board[spot.first][spot.second]) != '-';
+    };
+    
     // Find the places where the player can move.
     std::vector<std::pair<int, int>> movesFromSpot(std::pair<int, int>);
     
