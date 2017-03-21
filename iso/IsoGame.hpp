@@ -40,6 +40,9 @@ public:
     // Make a move and replace the old spot with an asterisk.
     void makeMove(std::pair<int, int>, std::pair<int, int>, char);
     
+    // Returns the character of the space on the board.
+    char returnSpace(std::pair<int, int> spot) const { return board[spot.first][spot.second]; };
+    
     // Print the isolation game board.
     void printBoard() const;
 };
