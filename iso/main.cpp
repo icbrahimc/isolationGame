@@ -18,9 +18,15 @@ char compPiece(char);
 char selectPiece();
 
 int main(int argc, const char * argv[]) {
-    IsoGame game = IsoGame();
-    game.newGameInit();
-    game.printBoard();
+    Player user, comp;
+    // User selects their piece.
+    user.piece = selectPiece();
+    // Gives the computer its piece.
+    comp.piece = compPiece(user.piece);
+    
+//    IsoGame game = IsoGame();
+//    game.newGameInit();
+//    game.printBoard();
 //    game.movesFromSpot(std::pair<int, int>(1,1));
 //    game.makeMove(std::pair<int, int>(1,1), std::pair<int, int>(0,0), 'X');
 //    game.printBoard();
