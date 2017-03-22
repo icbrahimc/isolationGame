@@ -18,6 +18,21 @@ IsoGame::IsoGame() {
     }
 }
 
+// Utility function.
+void IsoGame::calculateValue(char player, char comp) {
+    std::pair<int, int> playerPos = findIndex(player);
+    std::pair<int, int> opponentPos = findIndex(comp);
+    
+    std::vector<std::pair<int, int>> playerMoves = movesFromSpot(playerPos);
+    std::vector<std::pair<int, int>> opponentMoves = movesFromSpot(opponentPos);
+    
+    userMoves = playerMoves.size();
+    compMoves = opponentMoves.size();
+    
+    moveValue = userMoves - compMoves;
+    
+}
+
 // Find the index of a player's piece.
 std::pair<int, int> IsoGame::findIndex(char player) const{
     // Find the index of the players piece on the board.

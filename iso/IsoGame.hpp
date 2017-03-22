@@ -41,6 +41,9 @@ public:
         board[WIDTH - 1][HEIGHT - 1] = 'O';
     };
     
+    // Calculate the value of the board given the number of computer moves.
+    void calculateValue(char, char);
+    
     // Find the index of a current state.
     std::pair<int, int> findIndex(char) const;
     
