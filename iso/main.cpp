@@ -15,7 +15,9 @@ struct Player {
     char piece;
 };
 
-IsoGame min_val(IsoGame, IsoGame, IsoGame);
+IsoGame max(IsoGame, IsoGame);
+IsoGame min(IsoGame, IsoGame);
+IsoGame min_val(IsoGame, IsoGame, IsoGame, char);
 IsoGame max_val(IsoGame, IsoGame, IsoGame);
 char compPiece(char);
 char selectPiece();
@@ -81,10 +83,37 @@ char compPiece(char user) {
     return 'X';
 }
 
-IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta) {
+// Returns the max value game.
+IsoGame max(IsoGame valOne, IsoGame valTwo) {
+    if (valOne.returnValue() > valTwo.returnValue()) {
+        return valOne;
+    }
+    
+    return valTwo;
+}
+
+// Returns the min value game.
+IsoGame min(IsoGame valOne, IsoGame valTwo) {
+    if (valOne.returnValue() > valTwo.returnValue()) {
+        return valTwo;
+    }
+
+    return valOne;
+}
+
+// Min val function for the alpha beta algorithm.
+IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, char player) {
+    std::pair<int, int> spot = state.findIndex(player);
+    
+    if (state.terminalFunc().first) {
+        return state;
+    }
+    
+    std::vector<std::pair<int, int>> moves = state.movesFromSpot(spot);
     return IsoGame();
 }
 
+// Returns a random move for the game.
 std::pair<int, int> randMove(IsoGame game, char piece) {
     std::pair<int, int> spot = game.findIndex(piece);
     std::vector<std::pair<int, int>> moves = game.movesFromSpot(spot);
