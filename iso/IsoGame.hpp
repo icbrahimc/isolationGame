@@ -27,6 +27,10 @@
 class IsoGame {
 private:
     char board[WIDTH][HEIGHT];
+    int compMoves;
+    int userMoves;
+    int moveValue;
+    
 public:
     // Constructor
     IsoGame();
