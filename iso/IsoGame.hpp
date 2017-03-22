@@ -17,8 +17,8 @@
 #ifndef IsoGame_hpp
 #define IsoGame_hpp
 
-#define WIDTH 3
-#define HEIGHT 3
+#define WIDTH 4
+#define HEIGHT 4
 
 #include <iostream>
 #include <stdio.h>

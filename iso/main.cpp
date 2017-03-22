@@ -6,6 +6,7 @@
 //  Copyright © 2017 icbrahimc. All rights reserved.
 //
 
+#include <cmath>
 #include <iostream>
 #include "IsoGame.hpp"
 
@@ -17,8 +18,15 @@ struct Player {
 char compPiece(char);
 char selectPiece();
 std::pair<int, int> selectMove(IsoGame, char);
+std::pair<int, int> randMove(IsoGame, char);
 
 int main(int argc, const char * argv[]) {
+    srand(time(NULL));
+    
+    bool compTurn;
+    
+    std::pair<int, int> compMove, userMove, oldMove;
+    
     Player user, comp;
     // User selects their piece.
     user.piece = selectPiece();
@@ -28,6 +36,31 @@ int main(int argc, const char * argv[]) {
     // Start the new game.
     IsoGame game = IsoGame();
     game.newGameInit();
+    
+    //condition ? expression1 : expression2
+    (user.piece == 'X') ? (compTurn = false):(compTurn = true);
+    
+    while (!game.terminalFunc().first) {
+        if (compTurn) {
+            compMove = randMove(game, comp.piece);
+            oldMove = game.findIndex(comp.piece);
+            game.makeMove(oldMove, compMove, comp.piece);
+            compTurn = false;
+            continue;
+        }
+        
+        else {
+            userMove = selectMove(game, user.piece);
+            oldMove = game.findIndex(user.piece);
+            game.makeMove(oldMove, userMove, user.piece);
+            compTurn = true;
+            continue;
+            //game.printBoard();
+        }
+    }
+    
+    std::cout << "Done\n";
+    std::cout << "Win: " << game.terminalFunc().second << std::endl;
     
 //    game.printBoard();
 //    game.movesFromSpot(std::pair<int, int>(1,1));
@@ -44,6 +77,16 @@ char compPiece(char user) {
     }
     
     return 'X';
+}
+
+std::pair<int, int> randMove(IsoGame game, char piece) {
+    std::pair<int, int> spot = game.findIndex(piece);
+    std::vector<std::pair<int, int>> moves = game.movesFromSpot(spot);
+    int numOfMoves = moves.size();
+    
+    std::pair<int, int> randSpot = moves[rand() % numOfMoves];
+    
+    return randSpot;
 }
 
 // Selects the piece that the player uses in the game.
