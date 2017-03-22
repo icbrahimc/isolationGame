@@ -35,6 +35,15 @@ public:
     // Constructor
     IsoGame();
     
+    // Copy constructor.
+    IsoGame(const IsoGame &obj) {
+        for (int i = 0; i < HEIGHT; i++) {
+            for (int j = 0; j < WIDTH; j++) {
+                board[i][j] = obj.board[i][j];
+            }
+        }
+    };
+    
     // New game intialize.
     void newGameInit() {
         board[0][0] = 'X';
@@ -57,6 +66,7 @@ public:
     
     // Make a move and replace the old spot with an asterisk.
     void makeMove(std::pair<int, int>, std::pair<int, int>, char);
+    
     
     // Returns the character of the space on the board.
     char returnSpace(std::pair<int, int> spot) const { return board[spot.first][spot.second]; };

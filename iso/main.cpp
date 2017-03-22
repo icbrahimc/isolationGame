@@ -15,6 +15,8 @@ struct Player {
     char piece;
 };
 
+IsoGame min_val(IsoGame, IsoGame, IsoGame);
+IsoGame max_val(IsoGame, IsoGame, IsoGame);
 char compPiece(char);
 char selectPiece();
 std::pair<int, int> selectMove(IsoGame, char);
@@ -77,6 +79,10 @@ char compPiece(char user) {
     }
     
     return 'X';
+}
+
+IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta) {
+    return IsoGame();
 }
 
 std::pair<int, int> randMove(IsoGame game, char piece) {
