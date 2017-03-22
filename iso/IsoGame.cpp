@@ -163,6 +163,7 @@ std::vector<std::pair<int, int>> IsoGame::movesFromSpot(std::pair<int, int> spot
 
 // Print the game board.
 void IsoGame::printBoard() const {
+    std::cout << std::endl;
     std::cout << "  ";
     for (int count = 0; count < HEIGHT; count++) {
         std::cout << count << " ";

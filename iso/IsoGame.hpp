@@ -61,6 +61,9 @@ public:
     // Returns the character of the space on the board.
     char returnSpace(std::pair<int, int> spot) const { return board[spot.first][spot.second]; };
     
+    // Return the move value 'heuristic'.
+    int returnValue() const { return moveValue; };
+    
     // Terminal function.
     std::pair<bool, char> terminalFunc();
     

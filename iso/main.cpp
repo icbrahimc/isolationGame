@@ -16,6 +16,7 @@ struct Player {
 
 char compPiece(char);
 char selectPiece();
+std::pair<int, int> selectMove(IsoGame, char);
 
 int main(int argc, const char * argv[]) {
     Player user, comp;
@@ -24,8 +25,10 @@ int main(int argc, const char * argv[]) {
     // Gives the computer its piece.
     comp.piece = compPiece(user.piece);
     
-//    IsoGame game = IsoGame();
-//    game.newGameInit();
+    // Start the new game.
+    IsoGame game = IsoGame();
+    game.newGameInit();
+    
 //    game.printBoard();
 //    game.movesFromSpot(std::pair<int, int>(1,1));
 //    game.makeMove(std::pair<int, int>(1,1), std::pair<int, int>(0,0), 'X');
@@ -50,4 +53,17 @@ char selectPiece() {
     std::cout << "Choice: ";
     std::cin >> user;
     return user;
+}
+
+// Lets the user enter the space they want to move to.
+std::pair<int, int> selectMove(IsoGame game, char piece) {
+    // TODO(icbrahimc): Input validation.
+    game.printBoard();
+    int row, column;
+    std::cout << "Select the row: ";
+    std::cin >> row;
+    std::cout << "Select the column: ";
+    std::cin >> column;
+    
+    return std::pair<int, int>(row, column);
 }
