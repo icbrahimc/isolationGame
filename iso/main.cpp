@@ -7,6 +7,7 @@
 //
 
 #include <cmath>
+#include <limits>
 #include <iostream>
 #include "IsoGame.hpp"
 
@@ -17,8 +18,8 @@ struct Player {
 
 IsoGame max(IsoGame, IsoGame);
 IsoGame min(IsoGame, IsoGame);
-IsoGame min_val(IsoGame, IsoGame, IsoGame, char);
-IsoGame max_val(IsoGame, IsoGame, IsoGame);
+IsoGame min_val(IsoGame, IsoGame, IsoGame, char, char);
+IsoGame max_val(IsoGame, IsoGame, IsoGame, char, char);
 char compPiece(char);
 char selectPiece();
 std::pair<int, int> selectMove(IsoGame, char);
@@ -92,6 +93,42 @@ IsoGame max(IsoGame valOne, IsoGame valTwo) {
     return valTwo;
 }
 
+IsoGame max_val(IsoGame state, IsoGame alpha, IsoGame beta, char player, char comp) {
+    IsoGame holder;
+    std::pair<int, int> spot = state.findIndex(player);
+    
+    if (state.terminalFunc().first) {
+        return state;
+    }
+    
+    std::vector<std::pair<int, int>> moves = state.movesFromSpot(spot);
+    std::vector<IsoGame> gameMoves;
+    // Generate the games, with their evaluation num.
+    for (int count = 0; count < moves.size(); count++) {
+        holder = IsoGame(state);
+        holder.makeMove(spot, moves[count], player);
+        holder.calculateValue(player, comp);
+        gameMoves.push_back(holder);
+    }
+    
+    IsoGame limitValue = IsoGame(std::numeric_limits<int>::min());
+    
+    for (int count = 0; count < gameMoves.size(); count++) {
+        limitValue = max(limitValue, min_val(gameMoves[count], alpha, beta, player, comp));
+        
+        alpha.calculateValue(player, comp);
+        limitValue.calculateValue(player, comp);
+        if (beta.returnValue() <= limitValue.returnValue()) {
+            return limitValue;
+        }
+        
+        alpha.calculateValue(player, comp);
+        alpha = max(alpha, limitValue);
+    }
+    
+    return limitValue;
+}
+
 // Returns the min value game.
 IsoGame min(IsoGame valOne, IsoGame valTwo) {
     if (valOne.returnValue() > valTwo.returnValue()) {
@@ -102,7 +139,8 @@ IsoGame min(IsoGame valOne, IsoGame valTwo) {
 }
 
 // Min val function for the alpha beta algorithm.
-IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, char player) {
+IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, char player, char comp) {
+    IsoGame holder;
     std::pair<int, int> spot = state.findIndex(player);
     
     if (state.terminalFunc().first) {
@@ -110,7 +148,31 @@ IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, char player) {
     }
     
     std::vector<std::pair<int, int>> moves = state.movesFromSpot(spot);
-    return IsoGame();
+    std::vector<IsoGame> gameMoves;
+    // Generate the games, with their evaluation num.
+    for (int count = 0; count < moves.size(); count++) {
+        holder = IsoGame(state);
+        holder.makeMove(spot, moves[count], player);
+        holder.calculateValue(player, comp);
+        gameMoves.push_back(holder);
+    }
+    
+    IsoGame limitValue = IsoGame(std::numeric_limits<int>::max());
+    
+    for (int count = 0; count < gameMoves.size(); count++) {
+        limitValue = min(limitValue, max_val(gameMoves[count], alpha, beta, player, comp));
+        
+        alpha.calculateValue(player, comp);
+        limitValue.calculateValue(player, comp);
+        if (limitValue.returnValue() <= alpha.returnValue()) {
+            return limitValue;
+        }
+        
+        beta.calculateValue(player, comp);
+        beta = min(beta, limitValue);
+    }
+    
+    return limitValue;
 }
 
 // Returns a random move for the game.

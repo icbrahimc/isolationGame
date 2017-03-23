@@ -44,6 +44,10 @@ public:
         }
     };
     
+    IsoGame(int limitNum) {
+        moveValue = limitNum;
+    };
+    
     // New game intialize.
     void newGameInit() {
         board[0][0] = 'X';
