@@ -19,9 +19,9 @@ IsoGame::IsoGame() {
 }
 
 // Utility function.
-void IsoGame::calculateValue(char player, char comp) {
+void IsoGame::calculateValue(char player, char opp) {
     std::pair<int, int> playerPos = findIndex(player);
-    std::pair<int, int> opponentPos = findIndex(comp);
+    std::pair<int, int> opponentPos = findIndex(opp);
     
     std::vector<std::pair<int, int>> playerMoves = movesFromSpot(playerPos);
     std::vector<std::pair<int, int>> opponentMoves = movesFromSpot(opponentPos);

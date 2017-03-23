@@ -18,8 +18,8 @@ struct Player {
 
 IsoGame max(IsoGame, IsoGame);
 IsoGame min(IsoGame, IsoGame);
-IsoGame min_val(IsoGame, IsoGame, IsoGame, char, char);
-IsoGame max_val(IsoGame, IsoGame, IsoGame, char, char);
+IsoGame min_val(IsoGame, IsoGame, IsoGame, int, int, char, char);
+IsoGame max_val(IsoGame, IsoGame, IsoGame, int, int, char, char);
 IsoGame alphaBeta(IsoGame, char, char);
 char compPiece(char);
 char selectPiece();
@@ -42,13 +42,41 @@ int main(int argc, const char * argv[]) {
     // Start the new game.
     IsoGame game = IsoGame();
     game.newGameInit();
+    IsoGame aB;
+//    IsoGame huh = IsoGame(game);
+//    
+//    huh.makeMove(std::pair<int, int>(0,0), std::pair<int, int>(1,1), 'X');
+//    game.printBoard();
+//    huh.printBoard();
     
     //condition ? expression1 : expression2
     (user.piece == 'X') ? (compTurn = false):(compTurn = true);
+    game.printBoard();
+    
+//    IsoGame holder;
+//    std::pair<int, int> spot = game.findIndex(user.piece);
+//    std::vector<std::pair<int, int>> moves = game.movesFromSpot(spot);
+//    std::vector<IsoGame> gameMoves;
+//    
+//    // Generate the games, with their evaluation num.
+//    for (int count = 0; count < moves.size(); count++) {
+//        holder = IsoGame(game);
+//        holder.makeMove(spot, moves[count], user.piece);
+//        holder.calculateValue(user.piece, comp.piece);
+//        gameMoves.push_back(holder);
+//    }
+//    
+//    for (int count = 0; count < gameMoves.size(); count++) {
+//        gameMoves[count].printBoard();
+//        gameMoves[count].calculateValue(user.piece, comp.piece);
+//        std::cout << "Move: " << gameMoves[count].returnValue() << std::endl;
+//    }
+    //alphaBeta(game, 'X', 'O');
     
     while (!game.terminalFunc().first) {
         if (compTurn) {
-            compMove = randMove(game, comp.piece);
+            aB = alphaBeta(game, user.piece, comp.piece);
+            compMove = aB.findIndex(comp.piece);
             oldMove = game.findIndex(comp.piece);
             game.makeMove(oldMove, compMove, comp.piece);
             compTurn = false;
@@ -65,8 +93,8 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    std::cout << "Done\n";
-    std::cout << "Win: " << game.terminalFunc().second << std::endl;
+//    std::cout << "Done\n";
+//    std::cout << "Win: " << game.terminalFunc().second << std::endl;
     
 //    game.printBoard();
 //    game.movesFromSpot(std::pair<int, int>(1,1));
@@ -87,9 +115,9 @@ char compPiece(char user) {
 
 // Alpha beta.
 IsoGame alphaBeta(IsoGame state, char player, char comp) {
-    IsoGame alpha = std::numeric_limits<int>::min();
-    IsoGame beta = std::numeric_limits<int>::max();
-    IsoGame bestMove = max_val(state, alpha, beta, player, comp);
+    IsoGame alpha = IsoGame(0);
+    IsoGame beta = IsoGame(0);
+    IsoGame bestMove = max_val(state, alpha, beta, 3, 0, comp, player);//max_val(state, alpha, beta, comp, player);
     
     return bestMove;
 }
@@ -104,88 +132,112 @@ IsoGame max(IsoGame valOne, IsoGame valTwo) {
 }
 
 // Max val function for the alpha beta algorithm.
-IsoGame max_val(IsoGame state, IsoGame alpha, IsoGame beta, char player, char comp) {
-    IsoGame holder;
-    std::pair<int, int> spot = state.findIndex(player);
-    
-    if (state.terminalFunc().first) {
+IsoGame max_val(IsoGame state, IsoGame alpha, IsoGame beta, int dLimit, int depth, char player, char opp) {
+    IsoGame lastMove = IsoGame();
+    lastMove.calculateValue(player, opp);
+    IsoGame oppMove;
+    IsoGame returnGame;
+    if (state.terminalFunc().first == true) {
         return state;
     }
     
-    std::vector<std::pair<int, int>> moves = state.movesFromSpot(spot);
-    std::vector<IsoGame> gameMoves;
-    
-    // Generate the games, with their evaluation num.
-    for (int count = 0; count < moves.size(); count++) {
-        holder = IsoGame(state);
-        holder.makeMove(spot, moves[count], player);
-        holder.calculateValue(player, comp);
-        gameMoves.push_back(holder);
-    }
-    
-    IsoGame limitValue = IsoGame(std::numeric_limits<int>::min());
-    
-    for (int count = 0; count < gameMoves.size(); count++) {
-        limitValue = max(limitValue, min_val(gameMoves[count], alpha, beta, player, comp));
+    if (depth > dLimit) {
+        return state;
+    } else {
+        // Find the computer spot.
+        std::pair<int, int> spot = state.findIndex(player);
+        std::vector<std::pair<int, int>> gameMoves = state.movesFromSpot(spot);
         
-        alpha.calculateValue(player, comp);
-        limitValue.calculateValue(player, comp);
-        if (beta.returnValue() <= limitValue.returnValue()) {
-            return limitValue;
+        // Generate the game moves.
+        std::vector<IsoGame> validMoves;
+        for (int count = 0; count < gameMoves.size(); count++) {
+            IsoGame holder = IsoGame(state);
+            holder.makeMove(spot, gameMoves[count], player);
+            holder.calculateValue(player, opp);
+            validMoves.push_back(holder);
         }
         
-        alpha.calculateValue(player, comp);
-        alpha = max(alpha, limitValue);
+        for (int count = 0; count < validMoves.size(); count++) {
+            std::cout << "COMP TURN" << std::endl;
+            std::cout << "Depth: " << depth << std::endl;
+            validMoves[count].printBoard();
+            std::cout << std::endl;
+            std::cout << validMoves[count].returnValue() << std::endl << std::endl;
+            
+            oppMove = min_val(validMoves[count], alpha, beta, dLimit, depth + 1, opp, player);
+            if (oppMove.returnValue() > lastMove.returnValue()) {
+                lastMove = oppMove;
+                returnGame = validMoves[count];
+                alpha = oppMove;
+                alpha.calculateValue(player, opp);
+            }
+            
+            beta.calculateValue(opp, player);
+            if (beta.returnValue() < alpha.returnValue()) {
+                return returnGame;
+            }
+        }
+        
+        return returnGame;
     }
-    
-    return limitValue;
 }
 
 // Returns the min value game.
 IsoGame min(IsoGame valOne, IsoGame valTwo) {
-    if (valOne.returnValue() > valTwo.returnValue()) {
-        return valTwo;
+    if (valOne.returnValue() < valTwo.returnValue()) {
+        return valOne;
     }
 
-    return valOne;
+    return valTwo;
 }
 
 // Min val function for the alpha beta algorithm.
-IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, char player, char comp) {
-    IsoGame holder;
-    std::pair<int, int> spot = state.findIndex(player);
-    
-    if (state.terminalFunc().first) {
+IsoGame min_val(IsoGame state, IsoGame alpha, IsoGame beta, int dLimit, int depth, char player, char opp) {
+    IsoGame lastMove = IsoGame();
+    lastMove.calculateValue(player, opp);
+    IsoGame oppMove;
+    IsoGame returnGame;
+    if (state.terminalFunc().first == true) {
         return state;
     }
     
-    std::vector<std::pair<int, int>> moves = state.movesFromSpot(spot);
-    std::vector<IsoGame> gameMoves;
-    
-    // Generate the games, with their evaluation num.
-    for (int count = 0; count < moves.size(); count++) {
-        holder = IsoGame(state);
-        holder.makeMove(spot, moves[count], player);
-        holder.calculateValue(player, comp);
-        gameMoves.push_back(holder);
-    }
-    
-    IsoGame limitValue = IsoGame(std::numeric_limits<int>::max());
-    
-    for (int count = 0; count < gameMoves.size(); count++) {
-        limitValue = min(limitValue, max_val(gameMoves[count], alpha, beta, player, comp));
+    if (depth > dLimit) {
+        return state;
+    } else {
+        // Find the computer spot.
+        std::pair<int, int> spot = state.findIndex(player);
+        std::vector<std::pair<int, int>> gameMoves = state.movesFromSpot(spot);
         
-        alpha.calculateValue(player, comp);
-        limitValue.calculateValue(player, comp);
-        if (limitValue.returnValue() <= alpha.returnValue()) {
-            return limitValue;
+        // Generate the game moves.
+        std::vector<IsoGame> validMoves;
+        for (int count = 0; count < gameMoves.size(); count++) {
+            IsoGame holder = IsoGame(state);
+            holder.makeMove(spot, gameMoves[count], player);
+            holder.calculateValue(player, opp);
+            validMoves.push_back(holder);
         }
         
-        beta.calculateValue(player, comp);
-        beta = min(beta, limitValue);
+        for (int count = 0; count < validMoves.size(); count++) {
+            std::cout << "PLAYER TURN" << std::endl;
+            std::cout << "Depth: " << depth << std::endl;
+            validMoves[count].printBoard();
+            std::cout << validMoves[count].returnValue() << std::endl << std::endl;
+            oppMove = max_val(validMoves[count], alpha, beta, dLimit, depth + 1, opp, player);
+            if (oppMove.returnValue() > lastMove.returnValue()) {
+                lastMove = oppMove;
+                returnGame = validMoves[count];
+                beta = oppMove;
+                beta.calculateValue(player, opp);
+            }
+            
+            alpha.calculateValue(opp, player);
+            if (beta.returnValue() > alpha.returnValue()) {
+                return returnGame;
+            }
+        }
+        
+        return returnGame;
     }
-    
-    return limitValue;
 }
 
 // Returns a random move for the game.
